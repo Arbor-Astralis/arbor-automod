@@ -76,7 +76,7 @@ public final class Settings {
         }
         
         var settings = new GuildSettings(guildId);
-        settings.setQuestionModChannel(persistedSettings.getModChannelId());
+        settings.setStaffRoleId(persistedSettings.getStaffRoleId());
         settings.setModRoleId(persistedSettings.getModRoleId());
         
         return settings;
@@ -100,7 +100,7 @@ public final class Settings {
         Path settingsFile = getGuildSettingsFile(guildSettings.getGuildId());
 
         var document = new GuildSettingsDocument();
-        document.setModChannelId(guildSettings.getModChannelId().orElse(null));
+        document.setStaffRoleId(guildSettings.getStaffRoleId().orElse(null));
         document.setModRoleId(guildSettings.getModRoleId().orElse(null));
         
         var mapper = new ObjectMapper();

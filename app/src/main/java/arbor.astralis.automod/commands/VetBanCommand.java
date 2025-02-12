@@ -58,11 +58,14 @@ public final class VetBanCommand implements ApplicationCommand {
         if (settings.getModRoleId().isEmpty()) {
             return event.reply("No modRoleId defined for guild").withEphemeral(true);
         }
+        if (settings.getStaffRoleId().isEmpty()) {
+            return event.reply("No staffRoleId defined for guild").withEphemeral(true);
+        }
         
-        Member member = event.getInteraction().getUser().asMember(guildId).block();
-        boolean isSentinel = Boolean.TRUE.equals(member.getRoles().any(role -> role.getId().asLong() == settings.getModRoleId().get()).block());
+        Member triggerMember = event.getInteraction().getUser().asMember(guildId).block();
+        boolean isSentinel = Boolean.TRUE.equals(triggerMember.getRoles().any(role -> role.getId().asLong() == settings.getModRoleId().get()).block());
         if (!isSentinel) {
-            boolean isAdmin = Objects.requireNonNull(member.getBasePermissions().block()).contains(Permission.ADMINISTRATOR);
+            boolean isAdmin = Objects.requireNonNull(triggerMember.getBasePermissions().block()).contains(Permission.ADMINISTRATOR);
             if (!isAdmin) {
                 return event.reply("This command can only be used by Sentinels").withEphemeral(true);
             }
@@ -71,6 +74,10 @@ public final class VetBanCommand implements ApplicationCommand {
         Map<String, String> optionsAndValues = CommandHelper.marshalOptionValues(event);
         
         long targetMemberId = Long.parseLong(optionsAndValues.get(PARAMETER_USER));
+        boolean isStaff = Boolean.TRUE.equals(event.getClient().getMemberById(guildId, Snowflake.of(targetMemberId)).block().getRoles().any(role -> role.getId().asLong() == settings.getStaffRoleId().get().longValue()).block());
+        if (isStaff) {
+            return event.reply("Nice try. You can't vet-ban a staff member!").withEphemeral(true);
+        }
         Optional<Instant> joinTime = event.getClient().getMemberById(guildId, Snowflake.of(targetMemberId)).map(PartialMember::getJoinTime).block();
         
         if (!joinTime.isPresent()) {

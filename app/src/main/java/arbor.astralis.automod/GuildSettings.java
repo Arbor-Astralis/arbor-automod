@@ -8,19 +8,19 @@ public final class GuildSettings {
     private final long guildId;
     
     private @Nullable Long modRoleId;
-    private @Nullable Long modChannelId;
+    private @Nullable Long staffRoleId;
     
     
     public GuildSettings(long guildId) {
         this.guildId = guildId;
     }
 
-    public synchronized Optional<Long> getModChannelId() {
-        return Optional.ofNullable(modChannelId);
+    public synchronized Optional<Long> getStaffRoleId() {
+        return Optional.ofNullable(staffRoleId);
     }
     
-    public synchronized void setQuestionModChannel(@Nullable Long channelId) {
-        this.modChannelId = channelId;
+    public synchronized void setStaffRoleId(@Nullable Long roleId) {
+        this.staffRoleId = roleId;
         Settings.persistForGuild(this);
     }
     

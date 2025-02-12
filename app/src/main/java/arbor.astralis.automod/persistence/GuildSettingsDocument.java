@@ -4,16 +4,16 @@ import javax.annotation.Nullable;
 
 public final class GuildSettingsDocument {
     
-    private @Nullable Long modChannelId;
+    private @Nullable Long staffRoleId;
     private @Nullable Long modRoleId;
 
     @Nullable
-    public Long getModChannelId() {
-        return modChannelId;
+    public Long getStaffRoleId() {
+        return staffRoleId;
     }
 
-    public void setModChannelId(@Nullable Long modChannelId) {
-        this.modChannelId = modChannelId;
+    public void setStaffRoleId(@Nullable Long staffRoleId) {
+        this.staffRoleId = staffRoleId;
     }
 
     @Nullable
